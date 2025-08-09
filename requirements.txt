@@ -1,0 +1,12 @@
+# API
+flask
+
+# TEXT TO SPEECH
+tts
+
+# LANGUAGE MODEL
+
+# MACHINE LEARNING
+
+# OTHER
+coloredlogs
