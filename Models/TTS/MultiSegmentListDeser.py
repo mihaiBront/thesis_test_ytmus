@@ -1,4 +1,4 @@
-from lib.Commons import Serializable
+from lib.Serializable import Serializable
 from dataclasses import dataclass
 
 @dataclass

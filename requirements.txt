@@ -1,10 +1,15 @@
 # API
 flask
+requests
 
 # TEXT TO SPEECH
 tts
+torch
+torchaudio
 
 # LANGUAGE MODEL
+ollama
+llm-axe
 
 # MACHINE LEARNING
 
