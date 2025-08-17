@@ -1,10 +1,18 @@
 from LLMapi.iOllamaTool import OllamaTool
 from dataclasses import dataclass
 from newspaper import Article
+import os
+
 
 @dataclass
 class UrlParser(OllamaTool):
-    def _main(self, **kwargs):
+    
+    @staticmethod
+    def _get_config_file_path():
+        return os.path.splitext(os.path.relpath(__file__))[0] + '.json'
+    
+    @staticmethod
+    def _main(**kwargs):
         try:
             article = Article(kwargs['url'])
             article.download()

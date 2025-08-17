@@ -1,18 +1,13 @@
 from unittest import TestCase
 
-import trafilatura
 from newspaper import Article
-from bs4 import BeautifulSoup
-import requests
+from LLMapi.OllamaTools.UrlParser import UrlParser
+import coloredlogs
+from LLMapi.OllamaTools.WebBrowser import WebBrowser
+from LLMapi.OllamaTools.NewsBrowser import NewsBrowser
 
+coloredlogs.install(level='DEBUG', fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-class TestTrafilatura(TestCase):
-    def test_trafilatura(self):
-        url = "https://en.wikipedia.org/wiki/Monster"
-        html = trafilatura.fetch_url(url)
-        text = trafilatura.extract(html)
-        print(text)
-        
 class TestNewspaper(TestCase):
     def test_newspaper(self):
         article = Article('https://www.youtube.com')
@@ -20,25 +15,19 @@ class TestNewspaper(TestCase):
         article.parse()
         print(article.text)
         
-class TestBeautifulSoup(TestCase):
-    def test_beautifulsoup(self):
-        url = "https://www.youtube.com"
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.9',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1',
-            'Sec-Fetch-Dest': 'document',
-            'Sec-Fetch-Mode': 'navigate', 
-            'Sec-Fetch-Site': 'none',
-            'Sec-Fetch-User': '?1'
-        }
-        response = requests.get(url, headers=headers).text
-        soup = BeautifulSoup(response, 'html.parser')
-        print(soup.get_text())
+class TestURLParser(TestCase):
+    def test_url_parser(self):
+        url_parser = UrlParser.autoload()
+        print(url_parser.run(url="https://www.wikipedia.org/wiki/fiat"))
         
+class TestWebBrowser(TestCase):
+    def test_web_browser(self):
+        web_browser = WebBrowser.autoload()
+        res = web_browser.run(query="fiat car info", num_results=2)
+        print(res)
         
-        
-        
+class TestNewsBrowser(TestCase):
+    def test_news_browser(self):
+        news_browser = NewsBrowser.autoload()
+        res = news_browser.run(query="Kendrick Lamar", max_results=2)
+        print(res)

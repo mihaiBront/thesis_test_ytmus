@@ -9,7 +9,7 @@ torchaudio
 
 # LANGUAGE MODEL
 ollama
-llm-axe
+newspaper3k
 
 # MACHINE LEARNING
 

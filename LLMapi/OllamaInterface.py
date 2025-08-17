@@ -3,7 +3,8 @@ from ollama import Client
 from lib.Serializable import Serializable
 from lib.LoggingHelper import LoggingHelper
 from LLMapi.iOllamaTool import OllamaTool
-from LLMapi.OllamaTools.URLParser import UrlParser
+from LLMapi.OllamaTools.UrlParser import UrlParser
+from LLMapi.OllamaTools.WebBrowser import WebBrowser
 
 import json
 import logging as log
@@ -49,9 +50,11 @@ class OllamaInterface(Serializable):
             match tool:
                 case "url_parser":
                     self.__tools.update({
-                        "url_parser": UrlParser.from_file(
-                            "LLMapi/OllamaTools/URLParser.json"
-                        )
+                        "url_parser": UrlParser.autoload()
+                    })
+                case "web_browser":
+                    self.__tools.update({
+                        "web_browser": WebBrowser.autoload()
                     })
                 case _:
                     continue
@@ -75,17 +78,10 @@ class OllamaInterface(Serializable):
     def __run_tool(self, tool_call: dict):
         tool_name = tool_call['function']['name']
         arguments = tool_call['function']['arguments']
-        
-        # Map tool names
-        tool_mapping = {
-            "browse_web": "url_parser"
-        }
-        mapped_tool_name = tool_mapping.get(tool_name, tool_name)
-        
-        if mapped_tool_name not in self.__tools:
-            return {"error": f"Tool {tool_name} not found"}
             
-        tool = self.__tools[mapped_tool_name]
+        tool = self.__tools.get(tool_name, None)
+        if not tool:
+            return {"error": f"Tool {tool_name} not found"}
         return tool.run(**arguments)
 #endregion
 

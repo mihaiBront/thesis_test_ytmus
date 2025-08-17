@@ -1,25 +1,11 @@
 from dataclasses import dataclass, field
 from requests.utils import default_headers
 from lib.Serializable import Serializable
+import os
+import logging as log
 
-'''{
-    "type": "function",
-    "function": {
-      "name": "browse_web",
-      "description": "Retrieve HTML content from a live webpage. Always call this if the user's request requires information from a given URL.",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string",
-            "description": "The exact URL of the page to fetch."
-          }
-        },
-        "required": ["url"]
-      }
-    }
-  }'''
-  
+log.getLogger(__name__)
+    
 @dataclass
 class OllamaToolFunctionProperty(Serializable):
     type: str = field(default_factory=str)
@@ -41,6 +27,15 @@ class OllamaToolFunction(Serializable):
 class OllamaTool(Serializable):
     type: str = field(default_factory=str)
     function: OllamaToolFunction = field(default_factory=OllamaToolFunction)
+
+    @staticmethod
+    def _get_config_file_path():
+        raise NotImplementedError("Subclasses must implement this method")
+
+    @classmethod
+    def autoload(cls):
+        log.debug(f"Loading {cls.__name__} from {cls._get_config_file_path()}")
+        return cls.from_file(cls._get_config_file_path())
 
     def _main(self, **kwargs):
         raise NotImplementedError("Subclasses must implement this method")
