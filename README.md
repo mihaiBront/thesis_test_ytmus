@@ -1,1 +1,1 @@
-Music data provided by [https://getsongbpm.com](getsongbpm.com)
+Music data provided by [getsongbpm.com](https://getsongbpm.com)
